@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class ApiResponseObject {
 	
 	private int responseCode;
-	private List<Question> results;
+	private List<QuestionApiDTO> results;
 }
