@@ -5,9 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @NoArgsConstructor
-public class CorrectAnswer {
+public class Answer {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +25,8 @@ public class CorrectAnswer {
 	
 	private String answer;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "question_id", referencedColumnName = "id")
-	@JsonBackReference
+	@JsonIgnore
 	private Question question;
 }

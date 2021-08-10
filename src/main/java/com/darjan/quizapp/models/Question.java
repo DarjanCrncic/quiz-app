@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -34,13 +34,11 @@ public class Question {
 	private String difficulty;
 	private String question;
 	
-	@OneToOne(mappedBy = "question")
-	@JsonManagedReference
-	private CorrectAnswer correctAnswer;
+	private Long correctAnswerId;
 	
 	@OneToMany(mappedBy = "question")
 	@JsonManagedReference
-	private List<IncorrectAnswer> incorrectAnswers = new ArrayList<>();
+	private List<Answer> answers = new ArrayList<>();
 	
 	@OneToOne(mappedBy = "question")
 	@JsonManagedReference
@@ -48,6 +46,15 @@ public class Question {
 	
 	@ManyToOne
 	@JoinColumn(name = "quiz_id", referencedColumnName = "id")
-	@JsonBackReference
+	@JsonIgnore
 	private Quiz quiz;
+
+	@Override
+	public String toString() {
+		return "Question [id=" + id + ", category=" + category + ", type=" + type + ", difficulty=" + difficulty
+				+ ", question=" + question + ", correctAnswerId=" + correctAnswerId + ", answers=" + answers
+				+ ", userAnswer=" + userAnswer + "]";
+	}
+	
+	
 }
