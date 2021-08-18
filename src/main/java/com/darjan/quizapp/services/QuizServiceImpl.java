@@ -8,9 +8,11 @@ import com.darjan.quizapp.models.Answer;
 import com.darjan.quizapp.models.Question;
 import com.darjan.quizapp.models.QuestionApiDTO;
 import com.darjan.quizapp.models.Quiz;
+import com.darjan.quizapp.models.User;
 import com.darjan.quizapp.repositories.AnswerRepository;
 import com.darjan.quizapp.repositories.QuestionRepository;
 import com.darjan.quizapp.repositories.QuizRepository;
+import com.darjan.quizapp.repositories.UserRepository;
 import com.darjan.quizapp.utils.Helper;
 import com.darjan.quizapp.utils.QuestionsApi;
 
@@ -24,6 +26,7 @@ public class QuizServiceImpl implements QuizService {
 	private QuizRepository quizRepository;
 	private QuestionRepository questionRepository;
 	private AnswerRepository answerRepository;
+	private UserRepository userRepository;
 
 	@Override
 	public Quiz createNewQuiz() {
@@ -31,6 +34,10 @@ public class QuizServiceImpl implements QuizService {
 
 		Quiz quiz = new Quiz();
 		quizRepository.save(quiz);
+		
+		User user = userRepository.findById(1L).orElse(null);
+		quiz.setUser(user);
+		user.getQuizzes().add(quiz);
 
 		for (QuestionApiDTO question : questionList) {
 			Question newQuestion = new Question();
@@ -53,7 +60,7 @@ public class QuizServiceImpl implements QuizService {
 				savedAnswer = answerRepository.save(answer);
 				savedQuestion.getAnswers().add(savedAnswer);
 			}
-
+			savedQuestion.setQuiz(quiz);
 			savedQuestion = questionRepository.save(newQuestion);
 			quiz.getQuestions().add(savedQuestion);
 		}
@@ -69,5 +76,26 @@ public class QuizServiceImpl implements QuizService {
 		newQuestion.setDifficulty(questionData.getDifficulty());
 		newQuestion.setQuestion(questionData.getQuestion());
 		newQuestion.setType(questionData.getType());
+	}
+
+	@Override
+	public void handleQuizCompletion(Quiz quiz) {
+		Quiz savedQuiz = quizRepository.findById(quiz.getId()).orElse(null);
+		
+		if (savedQuiz != null) {
+			List<Question> savedQuestions = savedQuiz.getQuestions();
+			
+			for (int i=0; i<savedQuestions.size(); i++) {
+				Question savedQuestion = savedQuestions.get(i);
+				savedQuestion.setUserAnswer(quiz.getQuestions().get(i).getUserAnswer());
+				questionRepository.save(savedQuestion);
+			}
+			quizRepository.save(savedQuiz);
+		}
+	}
+
+	@Override
+	public List<Quiz> findAllByUserId(Long userId) {
+		return quizRepository.findAllByUserId(userId);
 	}
 }

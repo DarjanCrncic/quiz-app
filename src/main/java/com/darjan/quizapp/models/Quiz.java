@@ -7,9 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,7 +33,10 @@ public class Quiz {
 	private String type = "any";
 	
 	@OneToMany(mappedBy = "quiz")
-	@JsonManagedReference
 	private List<Question> questions = new ArrayList<>();
 
+	@ManyToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@JsonIgnore
+	private User user;
 }

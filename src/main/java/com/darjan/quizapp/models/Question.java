@@ -10,10 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,12 +35,9 @@ public class Question {
 	private Long correctAnswerId;
 	
 	@OneToMany(mappedBy = "question")
-	@JsonManagedReference
 	private List<Answer> answers = new ArrayList<>();
 	
-	@OneToOne(mappedBy = "question")
-	@JsonManagedReference
-	private UserAnswer userAnswer;
+	private Long userAnswer;
 	
 	@ManyToOne
 	@JoinColumn(name = "quiz_id", referencedColumnName = "id")
