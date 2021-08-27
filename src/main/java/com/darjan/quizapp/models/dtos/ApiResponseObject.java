@@ -1,4 +1,4 @@
-package com.darjan.quizapp.models;
+package com.darjan.quizapp.models.dtos;
 
 import java.util.List;
 

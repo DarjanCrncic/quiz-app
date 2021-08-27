@@ -1,8 +1,10 @@
 package com.darjan.quizapp.models;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -39,4 +44,14 @@ public class Quiz {
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	@JsonIgnore
 	private User user;
+	
+	private double result = 0.0;
+	
+	@Column(name = "creation_time")
+	@CreationTimestamp
+	private LocalDateTime creationTime;
+	
+	@Column(name = "update_time")
+	@UpdateTimestamp
+	private LocalDateTime updateTime;
 }
