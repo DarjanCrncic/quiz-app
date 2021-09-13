@@ -3,6 +3,8 @@ package com.darjan.quizapp.models;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,12 +25,16 @@ public class User {
 	@NotEmpty
 	private String username;
 	
-	@NotEmpty
-	private String password;
+	private String fullName;
 	
 	@Email
 	private String email;
 	
 	@OneToMany(mappedBy = "user")
 	private List<Quiz> quizzes;
+	
+	@Enumerated(EnumType.STRING)
+	private Provider provider;
+	
+	private boolean enabled = false;
 }

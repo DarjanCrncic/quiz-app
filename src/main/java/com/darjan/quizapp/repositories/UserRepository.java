@@ -6,4 +6,6 @@ import com.darjan.quizapp.models.User;
 
 public interface UserRepository extends JpaRepository<User, Long>{
 
+	User getUserByEmail(String email);
+
 }
