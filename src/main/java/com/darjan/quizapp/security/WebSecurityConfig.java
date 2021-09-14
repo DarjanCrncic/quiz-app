@@ -18,12 +18,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Value("${front.end.path}")
 	private String reactPath;
+	
+	@Value("${quiz_app_facebook_id}")
+	private String facebookId;
 
 	@Autowired
 	private CustomOAuth2UserService oauth2UserService;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		
 		http.csrf().disable().cors().and().authorizeRequests()
 			.antMatchers("/", "/login", "/logout").permitAll()
 
@@ -46,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Bean
     CorsConfigurationSource corsConfigurationSource() {
-		System.out.println("using custom CORS configuration");
+		System.out.println("using custom CORS configuration " + facebookId);
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(reactPath));
         configuration.setAllowedMethods(Arrays.asList("GET","POST"));
