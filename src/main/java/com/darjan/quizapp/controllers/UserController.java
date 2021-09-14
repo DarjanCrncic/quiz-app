@@ -17,7 +17,12 @@ public class UserController {
 	private UserService userService;
 	
 	@GetMapping("/users") 
-	public List<User> getAllUsers(Principal principal){
+	public List<User> getAllUsers(Principal principal) {
 		return userService.findAll();
+	}
+	
+	@GetMapping("/users/authenticated")
+	public Principal getPrincipal(Principal principal) {
+		return principal;
 	}
 }

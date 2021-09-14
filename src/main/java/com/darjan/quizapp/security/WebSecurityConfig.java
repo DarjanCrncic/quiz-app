@@ -19,9 +19,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value("${front.end.path}")
 	private String reactPath;
 	
-	@Value("${quiz_app_facebook_id}")
-	private String facebookId;
-
 	@Autowired
 	private CustomOAuth2UserService oauth2UserService;
 
@@ -50,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Bean
     CorsConfigurationSource corsConfigurationSource() {
-		System.out.println("using custom CORS configuration " + facebookId);
+		System.out.println("using custom CORS configuration ");
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(reactPath));
         configuration.setAllowedMethods(Arrays.asList("GET","POST"));
