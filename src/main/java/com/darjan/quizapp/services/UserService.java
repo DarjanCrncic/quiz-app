@@ -10,6 +10,6 @@ public interface UserService {
 
 	List<User> findAll();
 
-	void processOAuthPostLogin(String email, String username, String fullName);
+	Long processOAuthPostLogin(String email, String username, String fullName);
 
 }

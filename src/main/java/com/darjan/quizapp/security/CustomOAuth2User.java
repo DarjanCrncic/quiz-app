@@ -9,9 +9,13 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 public class CustomOAuth2User implements OAuth2User{
 
 	private OAuth2User oAuth2User;
+	private String token;
+	private Long id;
 	
-	public CustomOAuth2User(OAuth2User oAuth2User) {
+	public CustomOAuth2User(OAuth2User oAuth2User, String token, Long id) {
         this.oAuth2User = oAuth2User;
+        this.token = token;
+        this.id = id;
     }
 	
 	@Override
@@ -32,5 +36,12 @@ public class CustomOAuth2User implements OAuth2User{
 	public String getEmail() {
 		return oAuth2User.getAttribute("email");
 	}
-
+		
+	public String getToken() {
+		return token;
+	}
+	
+	public Long getId() {
+		return id;
+	}
 }

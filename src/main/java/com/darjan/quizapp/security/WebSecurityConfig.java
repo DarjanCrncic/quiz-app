@@ -37,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutSuccessUrl(reactPath)
 				.logoutUrl("/logout")
 				.deleteCookies("JSESSIONID")
+				.clearAuthentication(true)
 				.invalidateHttpSession(true);
 	}
 

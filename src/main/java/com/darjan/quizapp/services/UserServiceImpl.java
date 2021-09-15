@@ -27,9 +27,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void processOAuthPostLogin(String email, String username, String fullName) {
+	public Long processOAuthPostLogin(String email, String username, String fullName) {
 		User existUser = userRepository.getUserByEmail(email);
-
+		
 		if (existUser == null) {
 			System.out.println("saving new user");
 			
@@ -40,9 +40,10 @@ public class UserServiceImpl implements UserService {
 			newUser.setProvider(Provider.FACEBOOK);
 			newUser.setEnabled(true);
 
-			userRepository.save(newUser);
+			existUser = userRepository.save(newUser);
 		} else {
 			System.out.println("user already exist");
 		}
+		return existUser.getId();
 	}
 }

@@ -23,15 +23,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService  {
         System.out.println("customOAuth2UserService: " + user.toString());
         
         OAuth2AccessToken token = userRequest.getAccessToken();
-        System.out.println(token.toString());
+        //System.out.println(token.getTokenValue());
         
         String email = user.getAttribute("email");
         String fullName = user.getAttribute("name");
         String username = user.getAttribute("id");
         
-        userService.processOAuthPostLogin(email, username, fullName);
+        Long userId = userService.processOAuthPostLogin(email, username, fullName);
         
-        return new CustomOAuth2User(user);
+        return new CustomOAuth2User(user, token.getTokenValue(), userId);
     }
  
 }
