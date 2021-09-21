@@ -12,6 +12,7 @@ import com.darjan.quizapp.models.Quiz;
 import com.darjan.quizapp.models.QuizDifficulty;
 import com.darjan.quizapp.models.User;
 import com.darjan.quizapp.models.dtos.PaginationResponseDTO;
+import com.darjan.quizapp.models.dtos.PieChartItemDTO;
 import com.darjan.quizapp.models.dtos.QuestionApiDTO;
 import com.darjan.quizapp.repositories.AnswerRepository;
 import com.darjan.quizapp.repositories.QuestionRepository;
@@ -140,5 +141,15 @@ public class QuizServiceImpl implements QuizService {
 		dto.setPageCount(page.getTotalPages());
 		dto.setTotal(Math.toIntExact(page.getTotalElements()));
 		return dto;
+	}
+
+	@Override
+	public Object findById(Long quizId) {
+		return quizRepository.findById(quizId);
+	}
+
+	@Override
+	public List<PieChartItemDTO> getPieChartStatistics(Long userId) {
+		return quizRepository.getPieChartStats(userId);
 	}
 }

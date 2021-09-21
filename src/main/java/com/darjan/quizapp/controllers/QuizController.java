@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.darjan.quizapp.models.Quiz;
 import com.darjan.quizapp.models.dtos.PaginationResponseDTO;
+import com.darjan.quizapp.models.dtos.PieChartItemDTO;
 import com.darjan.quizapp.models.dtos.QuestionApiDTO;
 import com.darjan.quizapp.security.CustomOAuth2User;
 import com.darjan.quizapp.services.QuizService;
@@ -65,5 +66,10 @@ public class QuizController {
 		}
 
 		return quizService.findAllByUserId(user.getId(), pageable);
+	}
+	
+	@GetMapping("/users/statistics/{userId}")
+	public List<PieChartItemDTO> getPieChartStatistics(@PathVariable Long userId) {
+		return quizService.getPieChartStatistics(userId);
 	}
 }

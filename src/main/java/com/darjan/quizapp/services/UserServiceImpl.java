@@ -6,7 +6,12 @@ import org.springframework.stereotype.Service;
 
 import com.darjan.quizapp.models.Provider;
 import com.darjan.quizapp.models.User;
+import com.darjan.quizapp.models.dtos.FacebookFriendsDTO;
+import com.darjan.quizapp.models.dtos.FacebookFriendsDTO.FacebookUser;
+import com.darjan.quizapp.repositories.QuizRepository;
 import com.darjan.quizapp.repositories.UserRepository;
+import com.darjan.quizapp.security.CustomOAuth2User;
+import com.darjan.quizapp.utils.FacebookApi;
 
 import lombok.AllArgsConstructor;
 
@@ -15,7 +20,9 @@ import lombok.AllArgsConstructor;
 public class UserServiceImpl implements UserService {
 
 	UserRepository userRepository;
-
+	QuizRepository quizRepository;
+	FacebookApi facebookApi;
+	
 	@Override
 	public User findById(Long id) {
 		return userRepository.findById(id).orElse(null);
@@ -45,5 +52,14 @@ public class UserServiceImpl implements UserService {
 			System.out.println("user already exist");
 		}
 		return existUser.getId();
+	}
+
+	@Override
+	public FacebookFriendsDTO getFriendsGeneralData(CustomOAuth2User user) {
+		FacebookFriendsDTO friendsDTO = facebookApi.getUserFacebookData(user.getName() + "/friends", user.getToken(), "name,id,picture");
+		for (FacebookUser friend : friendsDTO.getData()) {
+			friend.setAverageScore(quizRepository.getAverageScore(friend.getId()));
+		}
+		return friendsDTO;
 	}
 }

@@ -1,9 +1,12 @@
 package com.darjan.quizapp.services;
 
+import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 
 import com.darjan.quizapp.models.Quiz;
 import com.darjan.quizapp.models.dtos.PaginationResponseDTO;
+import com.darjan.quizapp.models.dtos.PieChartItemDTO;
 import com.darjan.quizapp.security.CustomOAuth2User;
 
 public interface QuizService {
@@ -13,4 +16,8 @@ public interface QuizService {
 	public PaginationResponseDTO<Quiz> findAllByUserId(Long userId, Pageable pageable);
 
 	public void handleQuizCompletion(Quiz quiz, CustomOAuth2User user);
+
+	public Object findById(Long quizId);
+
+	public List<PieChartItemDTO> getPieChartStatistics(Long userId);
 }
