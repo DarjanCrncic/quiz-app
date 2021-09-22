@@ -5,8 +5,9 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 import com.darjan.quizapp.models.Quiz;
+import com.darjan.quizapp.models.dtos.AverageStatsDTO;
 import com.darjan.quizapp.models.dtos.PaginationResponseDTO;
-import com.darjan.quizapp.models.dtos.PieChartItemDTO;
+import com.darjan.quizapp.models.dtos.ResultChartItemDTO;
 import com.darjan.quizapp.security.CustomOAuth2User;
 
 public interface QuizService {
@@ -19,5 +20,9 @@ public interface QuizService {
 
 	public Object findById(Long quizId);
 
-	public List<PieChartItemDTO> getPieChartStatistics(Long userId);
+	public List<ResultChartItemDTO> getPieChartStatistics(Long userId);
+
+	public List<ResultChartItemDTO> getAveragePerCategory(Long userId);
+
+	public List<AverageStatsDTO> getAllAverageStatsPerCategory(Long userId);
 }

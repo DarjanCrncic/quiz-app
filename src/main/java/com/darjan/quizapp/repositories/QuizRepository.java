@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.darjan.quizapp.models.Quiz;
-import com.darjan.quizapp.models.dtos.PieChartItemDTO;
+import com.darjan.quizapp.models.dtos.AverageStatsDTO;
+import com.darjan.quizapp.models.dtos.ResultChartItemDTO;
 
 public interface QuizRepository extends JpaRepository<Quiz, Long>{
 
@@ -19,6 +20,13 @@ public interface QuizRepository extends JpaRepository<Quiz, Long>{
 
 	@Query(value = "select count(category)/(select count(*) from quiz) as 'percentage', category as 'label' from quiz where user_id = ?1 "
 			+ "group by category order by percentage desc", nativeQuery = true)
-	List<PieChartItemDTO> getPieChartStats(Long userId);
+	List<ResultChartItemDTO> getPieChartStats(Long userId);
 
+	@Query(value = "select sum(result)/count(result) as 'percentage', category as 'label' from quiz where user_id = 1 "
+			+ "group by category order by percentage desc", nativeQuery = true)
+	List<ResultChartItemDTO> getAverageQuizResultByCategory(Long userId);
+	
+	@Query(value = "select sum(result)/count(result) as 'avgScore', count(category)/(select count(*) from quiz) as 'playRate', category as 'label' from quiz where user_id = 1 "
+			+ "group by category order by avgScore desc", nativeQuery = true)
+	List<AverageStatsDTO> getAverageStats(Long userId);
 }

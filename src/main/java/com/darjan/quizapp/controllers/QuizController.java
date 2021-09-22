@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.darjan.quizapp.models.Quiz;
+import com.darjan.quizapp.models.dtos.AverageStatsDTO;
 import com.darjan.quizapp.models.dtos.PaginationResponseDTO;
-import com.darjan.quizapp.models.dtos.PieChartItemDTO;
 import com.darjan.quizapp.models.dtos.QuestionApiDTO;
+import com.darjan.quizapp.models.dtos.ResultChartItemDTO;
 import com.darjan.quizapp.security.CustomOAuth2User;
 import com.darjan.quizapp.services.QuizService;
 import com.darjan.quizapp.utils.Helper;
@@ -69,7 +70,17 @@ public class QuizController {
 	}
 	
 	@GetMapping("/users/statistics/{userId}")
-	public List<PieChartItemDTO> getPieChartStatistics(@PathVariable Long userId) {
+	public List<ResultChartItemDTO> getPieChartStatistics(@PathVariable Long userId) {
 		return quizService.getPieChartStatistics(userId);
+	}
+	
+	@GetMapping("/users/statistics/average/{userId}")
+	public List<ResultChartItemDTO> getAveragePerCategory(@PathVariable Long userId) {
+		return quizService.getAveragePerCategory(userId);
+	}
+	
+	@GetMapping("/users/statistics/category/{userId}")
+	public List<AverageStatsDTO> getAllAverageStatsPerCategory(@PathVariable Long userId) {
+		return quizService.getAllAverageStatsPerCategory(userId);
 	}
 }

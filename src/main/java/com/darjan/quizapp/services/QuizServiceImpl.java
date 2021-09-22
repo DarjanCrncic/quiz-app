@@ -11,9 +11,10 @@ import com.darjan.quizapp.models.Question;
 import com.darjan.quizapp.models.Quiz;
 import com.darjan.quizapp.models.QuizDifficulty;
 import com.darjan.quizapp.models.User;
+import com.darjan.quizapp.models.dtos.AverageStatsDTO;
 import com.darjan.quizapp.models.dtos.PaginationResponseDTO;
-import com.darjan.quizapp.models.dtos.PieChartItemDTO;
 import com.darjan.quizapp.models.dtos.QuestionApiDTO;
+import com.darjan.quizapp.models.dtos.ResultChartItemDTO;
 import com.darjan.quizapp.repositories.AnswerRepository;
 import com.darjan.quizapp.repositories.QuestionRepository;
 import com.darjan.quizapp.repositories.QuizRepository;
@@ -149,7 +150,17 @@ public class QuizServiceImpl implements QuizService {
 	}
 
 	@Override
-	public List<PieChartItemDTO> getPieChartStatistics(Long userId) {
+	public List<ResultChartItemDTO> getPieChartStatistics(Long userId) {
 		return quizRepository.getPieChartStats(userId);
+	}
+
+	@Override
+	public List<ResultChartItemDTO> getAveragePerCategory(Long userId) {
+		return quizRepository.getAverageQuizResultByCategory(userId);
+	}
+
+	@Override
+	public List<AverageStatsDTO> getAllAverageStatsPerCategory(Long userId) {
+		return quizRepository.getAverageStats(userId);
 	}
 }
