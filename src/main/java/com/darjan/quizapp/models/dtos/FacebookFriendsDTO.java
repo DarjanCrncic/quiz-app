@@ -15,6 +15,7 @@ public class FacebookFriendsDTO {
 		private String id;
 		private FacebookPicture picture;
 		private	double averageScore;
+		private Long dbId;
 
 		@Data public static class FacebookPicture {
 			private FacebookPictureData data;

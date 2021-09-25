@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.darjan.quizapp.models.Quiz;
 import com.darjan.quizapp.models.dtos.AverageStatsDTO;
+import com.darjan.quizapp.models.dtos.LeaderboardDTO;
 import com.darjan.quizapp.models.dtos.PaginationResponseDTO;
 import com.darjan.quizapp.models.dtos.QuestionApiDTO;
 import com.darjan.quizapp.models.dtos.ResultChartItemDTO;
@@ -42,9 +43,9 @@ public class QuizController {
 	@GetMapping("/")
 	public Quiz getNewQuiz(@RequestParam(defaultValue = "9") int category,
 			@RequestParam(defaultValue = "easy") String difficulty,
-			@RequestParam(defaultValue = "10") int questionNumber, @AuthenticationPrincipal CustomOAuth2User user)
+			@RequestParam(defaultValue = "10") int amount, @AuthenticationPrincipal CustomOAuth2User user)
 			throws Exception {
-		return quizService.createNewQuiz(category, difficulty, questionNumber, user);
+		return quizService.createNewQuiz(category, difficulty, amount, user);
 	}
 
 	@PostMapping("/")
@@ -82,5 +83,10 @@ public class QuizController {
 	@GetMapping("/users/statistics/category/{userId}")
 	public List<AverageStatsDTO> getAllAverageStatsPerCategory(@PathVariable Long userId) {
 		return quizService.getAllAverageStatsPerCategory(userId);
+	}
+	
+	@GetMapping("/users/statistics/leaderboard")
+	public List<LeaderboardDTO> getLeaderboard() {
+		return quizService.getLeaderboard();
 	}
 }

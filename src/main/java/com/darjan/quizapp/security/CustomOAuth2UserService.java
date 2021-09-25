@@ -28,8 +28,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService  {
         String email = user.getAttribute("email");
         String fullName = user.getAttribute("name");
         String username = user.getAttribute("id");
-        
-        Long userId = userService.processOAuthPostLogin(email, username, fullName);
+
+        Long userId = userService.processOAuthPostLogin(email, username, fullName, token);
         
         return new CustomOAuth2User(user, token.getTokenValue(), userId);
     }

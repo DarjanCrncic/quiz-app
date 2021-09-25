@@ -12,6 +12,7 @@ import com.darjan.quizapp.models.Quiz;
 import com.darjan.quizapp.models.QuizDifficulty;
 import com.darjan.quizapp.models.User;
 import com.darjan.quizapp.models.dtos.AverageStatsDTO;
+import com.darjan.quizapp.models.dtos.LeaderboardDTO;
 import com.darjan.quizapp.models.dtos.PaginationResponseDTO;
 import com.darjan.quizapp.models.dtos.QuestionApiDTO;
 import com.darjan.quizapp.models.dtos.ResultChartItemDTO;
@@ -45,6 +46,10 @@ public class QuizServiceImpl implements QuizService {
 		List<QuestionApiDTO> questionList = null;
 		if (isQuizRequestValid(difficulty, category, questionNumber)){
 			questionList = questionsApi.randomGet(questionNumber, category, difficulty, "base64").getResults();
+			
+			if (questionList.isEmpty()) {
+				questionList = questionsApi.randomGet(questionNumber, category, "easy", "base64").getResults();
+			}
 		} else {
 			throw new Exception("Request not valid.");
 		}
@@ -162,5 +167,10 @@ public class QuizServiceImpl implements QuizService {
 	@Override
 	public List<AverageStatsDTO> getAllAverageStatsPerCategory(Long userId) {
 		return quizRepository.getAverageStats(userId);
+	}
+
+	@Override
+	public List<LeaderboardDTO> getLeaderboard() {
+		return quizRepository.getLeaderboard();
 	}
 }

@@ -37,4 +37,6 @@ public class User {
 	private Provider provider;
 	
 	private boolean enabled = false;
+	
+	private String imageUrl;
 }
