@@ -18,16 +18,20 @@ import com.darjan.quizapp.security.CustomOAuth2User;
 import com.darjan.quizapp.security.WebSecurityConfig;
 import com.darjan.quizapp.utils.FacebookApi;
 
-import lombok.AllArgsConstructor;
-
 @Service
-@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
 	UserRepository userRepository;
 	QuizRepository quizRepository;
 	FacebookApi facebookApi;
 	
+	public UserServiceImpl(UserRepository userRepository, QuizRepository quizRepository, FacebookApi facebookApi) {
+		super();
+		this.userRepository = userRepository;
+		this.quizRepository = quizRepository;
+		this.facebookApi = facebookApi;
+	}
+
 	Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
 
 	@Override
