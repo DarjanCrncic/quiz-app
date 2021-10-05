@@ -1,5 +1,7 @@
 package com.darjan.quizapp.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -13,6 +15,8 @@ import com.darjan.quizapp.services.UserService;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService  {
 	
+	Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
+	
 	@Autowired
 	UserService userService;
  
@@ -20,7 +24,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService  {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
     	
         OAuth2User user =  super.loadUser(userRequest);
-        System.out.println("customOAuth2UserService: " + user.toString());
+        logger.info("customOAuth2UserService: " + user.toString());
         
         OAuth2AccessToken token = userRequest.getAccessToken();
         //System.out.println(token.getTokenValue());

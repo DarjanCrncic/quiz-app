@@ -2,6 +2,8 @@ package com.darjan.quizapp.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import com.darjan.quizapp.models.dtos.PlayerAvgScore;
 import com.darjan.quizapp.repositories.QuizRepository;
 import com.darjan.quizapp.repositories.UserRepository;
 import com.darjan.quizapp.security.CustomOAuth2User;
+import com.darjan.quizapp.security.WebSecurityConfig;
 import com.darjan.quizapp.utils.FacebookApi;
 
 import lombok.AllArgsConstructor;
@@ -24,6 +27,8 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
 	QuizRepository quizRepository;
 	FacebookApi facebookApi;
+	
+	Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
 
 	@Override
 	public User findById(Long id) {
@@ -40,7 +45,7 @@ public class UserServiceImpl implements UserService {
 		User existUser = userRepository.getUserByEmail(email);
 		
 		if (existUser == null) {
-			System.out.println("saving new user");
+			logger.info("saving new user");
 			
 			User newUser = new User();
 			newUser.setEmail(email);
@@ -50,7 +55,7 @@ public class UserServiceImpl implements UserService {
 			newUser.setEnabled(true);
 			existUser = userRepository.save(newUser);
 		} else {
-			System.out.println("updating existing user");
+			logger.info("updating existing user");
 			
 			FacebookUser user = facebookApi.getUserFacebookData(existUser.getUsername(), token.getTokenValue(), "name,id,picture");
 			existUser.setFullName(user.getName());
