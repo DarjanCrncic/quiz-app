@@ -12,14 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.darjan.quizapp.models.User;
 import com.darjan.quizapp.models.dtos.FacebookFriendsDTO;
-import com.darjan.quizapp.security.CustomOAuth2User;
-import com.darjan.quizapp.security.WebSecurityConfig;
+import com.darjan.quizapp.security.CustomUserDetails;
 import com.darjan.quizapp.services.UserService;
 
 @RestController
 public class UserController {
 	
-	Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	private UserService userService;
@@ -36,7 +35,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/users/friends")
-	public FacebookFriendsDTO getPrincipalFriends(@AuthenticationPrincipal CustomOAuth2User user) {
+	public FacebookFriendsDTO getPrincipalFriends(@AuthenticationPrincipal CustomUserDetails user) {
 		return userService.getFriendsGeneralData(user);
 	}
 	

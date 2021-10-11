@@ -20,7 +20,7 @@ import com.darjan.quizapp.models.dtos.LeaderboardDTO;
 import com.darjan.quizapp.models.dtos.PaginationResponseDTO;
 import com.darjan.quizapp.models.dtos.QuestionApiDTO;
 import com.darjan.quizapp.models.dtos.ResultChartItemDTO;
-import com.darjan.quizapp.security.CustomOAuth2User;
+import com.darjan.quizapp.security.CustomUserDetails;
 import com.darjan.quizapp.services.QuizService;
 import com.darjan.quizapp.utils.Helper;
 import com.darjan.quizapp.utils.QuestionsApi;
@@ -43,13 +43,13 @@ public class QuizController {
 	@GetMapping("/")
 	public Quiz getNewQuiz(@RequestParam(defaultValue = "9") int category,
 			@RequestParam(defaultValue = "easy") String difficulty,
-			@RequestParam(defaultValue = "10") int amount, @AuthenticationPrincipal CustomOAuth2User user)
+			@RequestParam(defaultValue = "10") int amount, @AuthenticationPrincipal CustomUserDetails user)
 			throws Exception {
 		return quizService.createNewQuiz(category, difficulty, amount, user);
 	}
 
 	@PostMapping("/")
-	public void postSolvedQuiz(@RequestBody Quiz quiz, @AuthenticationPrincipal CustomOAuth2User user) {
+	public void postSolvedQuiz(@RequestBody Quiz quiz, @AuthenticationPrincipal CustomUserDetails user) {
 		quizService.handleQuizCompletion(quiz, user);
 	}
 
@@ -57,7 +57,7 @@ public class QuizController {
 	public PaginationResponseDTO<Quiz> getQuizzesForUser(@PathVariable Long userId, @RequestParam int page,
 			@RequestParam(name = "per_page") int perPage, @RequestParam(defaultValue = "id") String order,
 			@RequestParam(defaultValue = "ASC", name = "order_by") String orderBy,
-			@AuthenticationPrincipal CustomOAuth2User user) {
+			@AuthenticationPrincipal CustomUserDetails user) {
 		Pageable pageable;
 
 		order = Helper.toCamelCase(order);
@@ -67,7 +67,7 @@ public class QuizController {
 			pageable = PageRequest.of(page, perPage, Sort.by(order).ascending());
 		}
 
-		return quizService.findAllByUserId(user.getId(), pageable);
+		return quizService.findAllByUserId(user.getUser().getId(), pageable);
 	}
 	
 	@GetMapping("/users/statistics/{userId}")

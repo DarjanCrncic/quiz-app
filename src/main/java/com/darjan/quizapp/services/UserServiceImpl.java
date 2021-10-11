@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
 
 import com.darjan.quizapp.models.Provider;
@@ -14,7 +13,7 @@ import com.darjan.quizapp.models.dtos.FacebookFriendsDTO.FacebookUser;
 import com.darjan.quizapp.models.dtos.PlayerAvgScore;
 import com.darjan.quizapp.repositories.QuizRepository;
 import com.darjan.quizapp.repositories.UserRepository;
-import com.darjan.quizapp.security.CustomOAuth2User;
+import com.darjan.quizapp.security.CustomUserDetails;
 import com.darjan.quizapp.security.WebSecurityConfig;
 import com.darjan.quizapp.utils.FacebookApi;
 
@@ -45,23 +44,26 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Long processOAuthPostLogin(String email, String username, String fullName, OAuth2AccessToken token) {
-		User existUser = userRepository.getUserByEmail(email);
+	public Long processOAuthPostLogin(String username, String token) {
+		
+		FacebookUser user = facebookApi.getUserFacebookData(username, token, "name,id,picture,email");
+		User existUser = userRepository.getUserByEmail(user.getEmail());
 		
 		if (existUser == null) {
 			logger.info("saving new user");
 			
 			User newUser = new User();
-			newUser.setEmail(email);
+			newUser.setEmail(user.getEmail());
 			newUser.setUsername(username);
-			newUser.setFullName(fullName);
+			newUser.setFullName(user.getName());
 			newUser.setProvider(Provider.FACEBOOK);
 			newUser.setEnabled(true);
+			newUser.setToken(token);
 			existUser = userRepository.save(newUser);
 		} else {
 			logger.info("updating existing user");
 			
-			FacebookUser user = facebookApi.getUserFacebookData(existUser.getUsername(), token.getTokenValue(), "name,id,picture");
+			existUser.setToken(token);
 			existUser.setFullName(user.getName());
 			existUser.setImageUrl(user.getPicture().getData().getUrl());
 			existUser.setUsername(user.getId());
@@ -71,8 +73,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public FacebookFriendsDTO getFriendsGeneralData(CustomOAuth2User user) {
-		FacebookFriendsDTO friendsDTO = facebookApi.getUserFriendsFacebookData(user.getName() + "/friends", user.getToken(), "name,id,picture");
+	public FacebookFriendsDTO getFriendsGeneralData(CustomUserDetails userDetails) {
+		FacebookFriendsDTO friendsDTO = facebookApi.getUserFriendsFacebookData(userDetails.getUsername() + "/friends", userDetails.getUser().getToken(), "name,id,picture");
 		for (FacebookUser friend : friendsDTO.getData()) {
 			PlayerAvgScore scoreData = quizRepository.getAverageScore(friend.getId());
 			friend.setAverageScore(scoreData.getResult());

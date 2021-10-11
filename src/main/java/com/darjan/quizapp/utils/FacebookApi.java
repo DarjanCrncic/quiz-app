@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.darjan.quizapp.models.dtos.FacebookDebugTokenDTO;
 import com.darjan.quizapp.models.dtos.FacebookFriendsDTO;
 import com.darjan.quizapp.models.dtos.FacebookFriendsDTO.FacebookUser;
 
@@ -16,5 +17,8 @@ public interface FacebookApi {
 	
 	@GetMapping("/{userId}")
 	public FacebookUser getUserFacebookData(@PathVariable String userId, @RequestParam String access_token, @RequestParam String fields);
+	
+	@GetMapping("/debug_token")
+	public FacebookDebugTokenDTO checkTokenValidity(@RequestParam String input_token, @RequestParam String access_token);
 	
 }

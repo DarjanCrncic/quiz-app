@@ -2,11 +2,9 @@ package com.darjan.quizapp.services;
 
 import java.util.List;
 
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
-
 import com.darjan.quizapp.models.User;
 import com.darjan.quizapp.models.dtos.FacebookFriendsDTO;
-import com.darjan.quizapp.security.CustomOAuth2User;
+import com.darjan.quizapp.security.CustomUserDetails;
 
 public interface UserService {
 
@@ -14,8 +12,8 @@ public interface UserService {
 
 	List<User> findAll();
 
-	Long processOAuthPostLogin(String email, String username, String fullName, OAuth2AccessToken token);
+	FacebookFriendsDTO getFriendsGeneralData(CustomUserDetails user);
 
-	FacebookFriendsDTO getFriendsGeneralData(CustomOAuth2User user);
+	Long processOAuthPostLogin(String username, String token);
 
 }

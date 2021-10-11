@@ -20,7 +20,7 @@ import com.darjan.quizapp.repositories.AnswerRepository;
 import com.darjan.quizapp.repositories.QuestionRepository;
 import com.darjan.quizapp.repositories.QuizRepository;
 import com.darjan.quizapp.repositories.UserRepository;
-import com.darjan.quizapp.security.CustomOAuth2User;
+import com.darjan.quizapp.security.CustomUserDetails;
 import com.darjan.quizapp.utils.Helper;
 import com.darjan.quizapp.utils.QuestionsApi;
 
@@ -42,7 +42,7 @@ public class QuizServiceImpl implements QuizService {
 	private static final int maxQuestionNum = 50;
 
 	@Override
-	public Quiz createNewQuiz(int category, String difficulty, int questionNumber, CustomOAuth2User auth2User) throws Exception {
+	public Quiz createNewQuiz(int category, String difficulty, int questionNumber, CustomUserDetails auth2User) throws Exception {
 		List<QuestionApiDTO> questionList = null;
 		if (isQuizRequestValid(difficulty, category, questionNumber)){
 			questionList = questionsApi.randomGet(questionNumber, category, difficulty, "base64").getResults();
@@ -57,7 +57,7 @@ public class QuizServiceImpl implements QuizService {
 		Quiz quiz = new Quiz();
 		quizRepository.save(quiz);
 		
-		User user = userRepository.findById(auth2User.getId()).orElse(null);
+		User user = userRepository.findById(auth2User.getUser().getId()).orElse(null);
 		quiz.setUser(user);
 		user.getQuizzes().add(quiz);
 		quiz.setEnabled(true);
@@ -113,9 +113,9 @@ public class QuizServiceImpl implements QuizService {
 	}
 
 	@Override
-	public void handleQuizCompletion(Quiz quiz, CustomOAuth2User auth2User) {
+	public void handleQuizCompletion(Quiz quiz, CustomUserDetails auth2User) {
 		Quiz savedQuiz = quizRepository.findById(quiz.getId()).orElse(null);
-		User user = userRepository.findById(auth2User.getId()).orElse(null);
+		User user = userRepository.findById(auth2User.getUser().getId()).orElse(null);
 		int correct = 0;
 		
 		if (savedQuiz != null && user != null) {

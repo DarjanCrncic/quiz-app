@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -28,25 +32,42 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private String allowedCorsOrigins;
 	
 	@Autowired
-	private CustomOAuth2UserService oauth2UserService;
-
+	private AuthEntryPoint unauthorizedHandler;
+	
+	@Bean
+	public AuthTokenFilter authenticationJwtTokenFilter() {
+		return new AuthTokenFilter();
+	}
+	
+	@Autowired
+	private CustomUserDetailsService userDetailsService;
+	
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+	    auth.userDetailsService(userDetailsService);
+	}
+	
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-		http.csrf().disable().cors().and().authorizeRequests()
-			.antMatchers("/", "/login", "/logout", "/users/authenticated").permitAll()
-
-			.anyRequest().authenticated()
-			.and().oauth2Login()
-				.userInfoEndpoint()
-				.userService(oauth2UserService)
-			.and().defaultSuccessUrl(reactPath)
-			.and().logout()
-				.logoutSuccessUrl(reactPath)
-				.logoutUrl("/logout")
-				.deleteCookies("JSESSIONID")
-				.clearAuthentication(true)
-				.invalidateHttpSession(true);
+		http.csrf().disable().cors()
+			.and()
+			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+			.and()
+			.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.authorizeRequests()
+				.antMatchers("/", "/login", "/logout", "/users/authenticated").permitAll()
+				.anyRequest().authenticated();
+		
+		http.addFilterBefore(authenticationJwtTokenFilter(), BasicAuthenticationFilter.class);
 	}
 
 	@Override

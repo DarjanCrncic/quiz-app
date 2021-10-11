@@ -39,4 +39,14 @@ public class User {
 	private boolean enabled = false;
 	
 	private String imageUrl;
+	
+	private String token;
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", fullName=" + fullName + ", email=" + email
+				+ ", provider=" + provider + ", enabled=" + enabled + ", imageUrl=" + imageUrl + "]";
+	}
+	
+	
 }
