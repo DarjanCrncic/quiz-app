@@ -1,6 +1,5 @@
 package com.darjan.quizapp.controllers;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -24,14 +23,14 @@ public class UserController {
 	private UserService userService;
 	
 	@GetMapping("/users") 
-	public List<User> getAllUsers(Principal principal) {
+	public List<User> getAllUsers(@AuthenticationPrincipal CustomUserDetails user) {
 		return userService.findAll();
 	}
 	
 	@GetMapping("/users/authenticated")
-	public Principal getPrincipal(Principal principal) {
+	public CustomUserDetails getPrincipal(@AuthenticationPrincipal CustomUserDetails user) {
 		logger.info("trying authenticated...");
-		return principal;
+		return user;
 	}
 	
 	@GetMapping("/users/friends")

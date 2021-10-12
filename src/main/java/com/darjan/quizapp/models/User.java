@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -31,6 +33,7 @@ public class User {
 	private String email;
 	
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	private List<Quiz> quizzes;
 	
 	@Enumerated(EnumType.STRING)
@@ -40,6 +43,7 @@ public class User {
 	
 	private String imageUrl;
 	
+	@JsonIgnore
 	private String token;
 
 	@Override

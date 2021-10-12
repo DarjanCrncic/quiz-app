@@ -38,7 +38,6 @@ public class JWTUtils {
 				.setSubject("JWT Token")
 				.claim("username", userPrincipal.getUsername())
 				.claim("userId", userPrincipal.getUser().getId())
-				.claim("facebookToken", userPrincipal.getUser().getToken())
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
 				.signWith(key)

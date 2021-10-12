@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
@@ -38,14 +37,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 				String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
 				CustomUserDetails userDetails = userDetailsService.loadUserByUsername(username);
-				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-						userDetails.getUsername(), userDetails.getUser().getToken(), userDetails.getAuthorities());
+				CustomAuthenticationToken authentication = new CustomAuthenticationToken(userDetails.getUsername());
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-			}
+			} 
 		} catch (Exception e) {
 			logger.error("Cannot set user authentication: {}", e);
+			throw e;
 		}
 
 		filterChain.doFilter(request, response);

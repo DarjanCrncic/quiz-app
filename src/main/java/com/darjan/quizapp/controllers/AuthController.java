@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.darjan.quizapp.models.dtos.AuthRequest;
 import com.darjan.quizapp.models.dtos.FacebookDebugTokenDTO;
+import com.darjan.quizapp.security.CustomAuthenticationToken;
 import com.darjan.quizapp.security.JWTUtils;
 import com.darjan.quizapp.services.UserService;
 import com.darjan.quizapp.utils.FacebookApi;
@@ -52,7 +52,7 @@ public class AuthController {
 			// save new user to db or update existing one...
 			userService.processOAuthPostLogin(authRequest.getUserID(), authRequest.getAccessToken());
 			
-			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(authRequest.getUserID(), authRequest.getAccessToken());
+			CustomAuthenticationToken authToken = new CustomAuthenticationToken(authRequest.getUserID());
 			authentication = authenticationManager.authenticate(authToken);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		} else {

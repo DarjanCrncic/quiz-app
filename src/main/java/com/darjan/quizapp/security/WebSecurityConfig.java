@@ -40,11 +40,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	@Autowired
-	private CustomUserDetailsService userDetailsService;
+	private CustomAuthenticationProvider customAuthenticationProvider;
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-	    auth.userDetailsService(userDetailsService);
+	    auth.authenticationProvider(customAuthenticationProvider);
 	}
 	
 	@Bean
