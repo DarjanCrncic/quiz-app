@@ -76,9 +76,11 @@ public class UserServiceImpl implements UserService {
 	public FacebookFriendsDTO getFriendsGeneralData(CustomUserDetails userDetails) {
 		FacebookFriendsDTO friendsDTO = facebookApi.getUserFriendsFacebookData(userDetails.getUsername() + "/friends", userDetails.getUser().getToken(), "name,id,picture");
 		for (FacebookUser friend : friendsDTO.getData()) {
-			PlayerAvgScore scoreData = quizRepository.getAverageScore(friend.getId());
-			friend.setAverageScore(scoreData.getResult());
-			friend.setDbId(scoreData.getUserId());
+			if (userRepository.findByUsername(friend.getId()) != null) {
+				PlayerAvgScore scoreData = quizRepository.getAverageScore(friend.getId());
+				friend.setAverageScore(scoreData.getResult());
+				friend.setDbId(scoreData.getUserId());
+			}
 		}
 		return friendsDTO;
 	}

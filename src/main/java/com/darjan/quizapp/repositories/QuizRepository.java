@@ -35,4 +35,5 @@ public interface QuizRepository extends JpaRepository<Quiz, Long>{
 	@Query(value = "select sum(q.result)/count(q.result) as 'avgScore', u.id as 'id', u.full_name as 'fullName', u.image_url as 'imageUrl',\r\n"
 			+ "u.username as 'username', u.email as 'email' from quiz q join user u on u.id = q.user_id group by q.user_id order by avgScore desc", nativeQuery = true)
 	List<LeaderboardDTO> getLeaderboard();
+
 }
