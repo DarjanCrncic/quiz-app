@@ -33,10 +33,10 @@ public class AuthController {
 	@Autowired
 	JWTUtils jwtUtils;
 	
-	@Value("${quiz_app_facebook_id}")
+	@Value("${spring.security.oauth2.client.registration.facebook.client-id}")
 	String appId;
 	
-	@Value("${quiz_app_facebook_secret}")
+	@Value("${spring.security.oauth2.client.registration.facebook.client-secret}")
 	String appSecret;
 	
 	@Autowired
