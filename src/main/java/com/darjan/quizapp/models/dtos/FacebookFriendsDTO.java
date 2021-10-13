@@ -1,5 +1,6 @@
 package com.darjan.quizapp.models.dtos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -7,7 +8,7 @@ import lombok.Data;
 @Data
 public class FacebookFriendsDTO {
 
-	private List<FacebookUser> data;
+	private List<FacebookUser> data = new ArrayList<>();
 
 	@Data
 	public static class FacebookUser {
