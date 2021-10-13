@@ -19,7 +19,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		logger.info("using custom authentication provider...");
 		CustomUserDetails userDetails = customUserDetailsService.loadUserByUsername(authentication.getName());
 
 		if (userDetails == null || !userDetails.getUser().getUsername().equalsIgnoreCase(authentication.getName())) {

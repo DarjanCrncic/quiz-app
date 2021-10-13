@@ -23,7 +23,6 @@ public class CustomUserDetailsService implements UserDetailsService{
 		if (authUser == null) {
 			throw new UsernameNotFoundException("User not found");
 		}
-		logger.info("inside custom user details, user found");
 		return new CustomUserDetails(authUser);
 	}
 }
